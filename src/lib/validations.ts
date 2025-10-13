@@ -90,7 +90,9 @@ export const paymentVerificationSchema = z.object({
 // File upload validation
 export const fileUploadSchema = z.object({
   file: z.any().refine((file) => file instanceof File, 'File is required'),
-  type: z.enum(['image'], 'Invalid file type'),
+  type: z.enum(['image'], {
+    errorMap: () => ({ message: 'Invalid file type' }),
+  }),
 });
 
 // Search and filter validation
