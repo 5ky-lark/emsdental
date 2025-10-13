@@ -129,3 +129,17 @@ model Inquiry {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model Quotation {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  company     String?
+  products    String   // JSON string of requested products
+  quantity    String?
+  message     String?
+  status      String   @default("pending")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
