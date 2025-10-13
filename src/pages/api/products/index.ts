@@ -57,7 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
 
         // Create inclusions if provided
-        let productInclusions = [];
+        let productInclusions: any[] = [];
         if (inclusions && Array.isArray(inclusions) && inclusions.length > 0) {
           const inclusionPromises = inclusions.map(inclusion => 
             prisma.productInclusion.create({
