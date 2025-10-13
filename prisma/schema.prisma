@@ -117,3 +117,15 @@ model CartItemInclusion {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model Inquiry {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  subject     String
+  message     String
+  status      String   @default("pending")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
