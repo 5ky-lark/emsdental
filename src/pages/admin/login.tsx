@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -9,6 +9,15 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const adminToken = document.cookie.includes('adminToken');
+    if (adminToken) {
+      // User is already logged in, redirect to dashboard
+      window.location.href = '/admin/dashboard';
+    }
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +48,9 @@ export default function AdminLogin() {
       sessionStorage.setItem('adminUser', JSON.stringify(data.user));
       
       console.log('Login successful, redirecting to dashboard');
-      router.push('/admin/dashboard');
+      
+      // Use window.location for a hard redirect to avoid Next.js navigation issues
+      window.location.href = '/admin/dashboard';
     } catch (err) {
       console.error('Login error:', err);
       setError(err instanceof Error ? err.message : 'Login failed');
