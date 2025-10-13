@@ -13,9 +13,29 @@ export function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL('/admin/login', request.url));
     }
 
-    // For now, just check if token exists (we'll do proper verification in the API)
-    // This prevents the middleware from causing 502 errors
-    return NextResponse.next();
+    try {
+      // Verify the simple base64 token
+      const tokenData = JSON.parse(Buffer.from(adminToken, 'base64').toString());
+      
+      if (!tokenData.isAdmin) {
+        // Token is not for admin, redirect to login
+        return NextResponse.redirect(new URL('/admin/login', request.url));
+      }
+      
+      // Check if token is not too old (24 hours)
+      const tokenAge = Date.now() - tokenData.timestamp;
+      if (tokenAge > 24 * 60 * 60 * 1000) {
+        // Token is too old, redirect to login
+        return NextResponse.redirect(new URL('/admin/login', request.url));
+      }
+      
+      // Token is valid, continue to the requested page
+      return NextResponse.next();
+    } catch (error) {
+      // Token is invalid, redirect to login
+      console.error('Admin token verification failed:', error);
+      return NextResponse.redirect(new URL('/admin/login', request.url));
+    }
   }
 
   // For non-admin routes, continue normally

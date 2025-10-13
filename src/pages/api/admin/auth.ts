@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import jwt from 'jsonwebtoken';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // Set CORS headers
@@ -38,18 +37,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       role: 'admin',
     };
 
-    // Create admin-specific token
-    const jwtSecret = process.env.JWT_SECRET || 'fallback-secret-key-for-admin';
-    const token = jwt.sign(
-      { 
-        id: adminUser.id,
-        username: adminUser.username,
-        role: adminUser.role,
-        isAdmin: true 
-      },
-      jwtSecret,
-      { expiresIn: '1d' }
-    );
+    // Create a simple admin token (base64 encoded for now)
+    const tokenData = {
+      id: adminUser.id,
+      username: adminUser.username,
+      role: adminUser.role,
+      isAdmin: true,
+      timestamp: Date.now()
+    };
+    
+    const token = Buffer.from(JSON.stringify(tokenData)).toString('base64');
 
     // Set admin token cookie
     const cookieOptions = [
