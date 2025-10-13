@@ -212,15 +212,15 @@ export const withAdminDashboard = withPermission(PERMISSIONS.ADMIN_DASHBOARD);
 
 // Helper function to check if user is admin
 export function isAdmin(userRole: string): boolean {
-  return [ROLES.SUPER_ADMIN, ROLES.ADMIN].includes(userRole as Role);
+  return userRole === ROLES.SUPER_ADMIN || userRole === ROLES.ADMIN;
 }
 
 // Helper function to check if user is manager or above
 export function isManagerOrAbove(userRole: string): boolean {
-  return [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.MANAGER].includes(userRole as Role);
+  return userRole === ROLES.SUPER_ADMIN || userRole === ROLES.ADMIN || userRole === ROLES.MANAGER;
 }
 
 // Helper function to check if user is staff or above
 export function isStaffOrAbove(userRole: string): boolean {
-  return [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.MANAGER, ROLES.STAFF].includes(userRole as Role);
+  return userRole === ROLES.SUPER_ADMIN || userRole === ROLES.ADMIN || userRole === ROLES.MANAGER || userRole === ROLES.STAFF;
 }
