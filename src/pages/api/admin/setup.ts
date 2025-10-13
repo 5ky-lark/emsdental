@@ -8,40 +8,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // Check if admin already exists
-    const adminExists = await prisma.user.findFirst({
-      where: { role: 'admin' },
-    });
-
-    if (adminExists) {
-      return res.status(200).json({ 
-        success: true,
-        message: 'Admin user already exists',
-        email: adminExists.email,
-      });
-    }
-
-    // Create admin user
-    const hashedPassword = await bcrypt.hash('admin123', 10);
-    const admin = await prisma.user.create({
-      data: {
-        email: 'admin@example.com',
-        password: hashedPassword,
-        role: 'admin',
-        name: 'Admin User',
-      },
-    });
-
     res.status(200).json({
       success: true,
-      message: 'Admin user created successfully',
-      email: admin.email,
-      password: 'admin123',
+      message: 'Admin login is ready to use',
+      credentials: {
+        username: 'admin',
+        password: 'admin123',
+      },
+      note: 'Admin authentication now uses simple username/password instead of database lookup',
     });
   } catch (error) {
     console.error('Setup admin error:', error);
     res.status(500).json({ 
-      message: 'Failed to create admin user',
+      message: 'Failed to setup admin',
       error: error instanceof Error ? error.message : 'Unknown error'
     });
   }

@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 export default function AdminLogin() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +21,7 @@ export default function AdminLogin() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, password }),
       });
 
       const data = await response.json();
@@ -68,16 +68,16 @@ export default function AdminLogin() {
 
             <form className="w-full space-y-5" onSubmit={handleLogin}>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-primary-700 mb-1">Email address</label>
+                <label htmlFor="username" className="block text-sm font-medium text-primary-700 mb-1">Username</label>
                 <input
-                  id="email"
-                  name="email"
-                  type="email"
+                  id="username"
+                  name="username"
+                  type="text"
                   required
                   className="input-field bg-white"
-                  placeholder="admin@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="admin"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
               <div>
@@ -88,7 +88,7 @@ export default function AdminLogin() {
                   type="password"
                   required
                   className="input-field bg-white"
-                  placeholder="Password"
+                  placeholder="admin123"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />

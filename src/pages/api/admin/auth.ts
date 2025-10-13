@@ -9,47 +9,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
-    console.log('Admin login attempt:', { email, hasPassword: !!password });
+    console.log('Admin login attempt:', { username, hasPassword: !!password });
 
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Please provide email and password' });
+    if (!username || !password) {
+      return res.status(400).json({ message: 'Please provide username and password' });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email },
-      select: {
-        id: true,
-        email: true,
-        password: true,
-        role: true,
-        name: true,
-      },
-    });
-
-    console.log('User found:', { exists: !!user, hasPassword: !!user?.password, role: user?.role });
-
-    if (!user || !user.password) {
-      return res.status(401).json({ message: 'Invalid email or password' });
+    // For admin login, we'll use a simple username check
+    // Username: admin, Password: admin123
+    if (username !== 'admin' || password !== 'admin123') {
+      return res.status(401).json({ message: 'Invalid username or password' });
     }
 
-    const isValid = await bcrypt.compare(password, user.password);
-
-    if (!isValid) {
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
-
-    if (user.role !== 'admin') {
-      return res.status(403).json({ message: 'Access denied. Admin privileges required.' });
-    }
+    // Create a mock admin user object for the session
+    const adminUser = {
+      id: 'admin-user',
+      username: 'admin',
+      name: 'Admin User',
+      role: 'admin',
+    };
 
     // Create admin-specific token
     const token = jwt.sign(
       { 
-        id: user.id,
-        email: user.email,
-        role: user.role,
+        id: adminUser.id,
+        username: adminUser.username,
+        role: adminUser.role,
         isAdmin: true 
       },
       process.env.JWT_SECRET!,
@@ -65,10 +52,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json({
       success: true,
       user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
+        id: adminUser.id,
+        username: adminUser.username,
+        name: adminUser.name,
+        role: adminUser.role,
       },
     });
   } catch (error) {
