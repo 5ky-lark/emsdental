@@ -19,8 +19,8 @@ import {
   UsersIcon,
   CurrencyDollarIcon,
   CubeIcon,
-  TrendingUpIcon,
-  TrendingDownIcon,
+  ArrowTrendingUpIcon,
+  ArrowTrendingDownIcon,
   ExclamationTriangleIcon,
   CheckCircleIcon,
 } from '@heroicons/react/24/outline';
@@ -255,9 +255,9 @@ export default function AdminDashboard() {
                 trend === 'up' ? 'text-green-600' : 'text-red-600'
               }`}>
                 {trend === 'up' ? (
-                  <TrendingUpIcon className="h-4 w-4 mr-1" />
+                  <ArrowTrendingUpIcon className="h-4 w-4 mr-1" />
                 ) : (
-                  <TrendingDownIcon className="h-4 w-4 mr-1" />
+                  <ArrowTrendingDownIcon className="h-4 w-4 mr-1" />
                 )}
                 {trendValue}
               </div>

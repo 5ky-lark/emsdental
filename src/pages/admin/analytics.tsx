@@ -16,8 +16,8 @@ import {
 import { Line, Bar, Doughnut, Pie } from 'react-chartjs-2';
 import {
   ChartBarIcon,
-  TrendingUpIcon,
-  TrendingDownIcon,
+  ArrowTrendingUpIcon,
+  ArrowTrendingDownIcon,
   EyeIcon,
   ShoppingCartIcon,
   CurrencyDollarIcon,
@@ -243,9 +243,9 @@ export default function AnalyticsPage() {
                 change >= 0 ? 'text-green-600' : 'text-red-600'
               }`}>
                 {change >= 0 ? (
-                  <TrendingUpIcon className="h-4 w-4 mr-1" />
+                  <ArrowTrendingUpIcon className="h-4 w-4 mr-1" />
                 ) : (
-                  <TrendingDownIcon className="h-4 w-4 mr-1" />
+                  <ArrowTrendingDownIcon className="h-4 w-4 mr-1" />
                 )}
                 {Math.abs(change).toFixed(1)}%
               </div>
