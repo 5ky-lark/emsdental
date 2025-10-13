@@ -50,8 +50,8 @@ export default function AdminLogin() {
       console.log('Login successful, redirecting to dashboard');
       
       // Use window.location for a hard redirect to avoid Next.js navigation issues
-      // Temporarily redirect to simple dashboard for testing
-      window.location.href = '/admin/dashboard-simple';
+      // Redirect to products management
+      window.location.href = '/admin/products';
     } catch (err) {
       console.error('Login error:', err);
       setError(err instanceof Error ? err.message : 'Login failed');
