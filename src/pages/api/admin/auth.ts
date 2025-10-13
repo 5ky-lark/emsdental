@@ -11,6 +11,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const { email, password } = req.body;
 
+    console.log('Admin login attempt:', { email, hasPassword: !!password });
+
     if (!email || !password) {
       return res.status(400).json({ message: 'Please provide email and password' });
     }
@@ -25,6 +27,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         name: true,
       },
     });
+
+    console.log('User found:', { exists: !!user, hasPassword: !!user?.password, role: user?.role });
 
     if (!user || !user.password) {
       return res.status(401).json({ message: 'Invalid email or password' });
