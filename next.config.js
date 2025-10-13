@@ -47,7 +47,6 @@ const nextConfig = {
   },
   // Performance optimizations
   experimental: {
-    optimizeCss: true,
     optimizePackageImports: ['@heroicons/react', 'react-icons'],
   },
   // Compression
