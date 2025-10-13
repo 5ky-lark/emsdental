@@ -95,30 +95,34 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading dashboard...</p>
+      <AdminLayout>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading dashboard...</p>
+          </div>
         </div>
-      </div>
+      </AdminLayout>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <ExclamationTriangleIcon className="h-16 w-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Error Loading Dashboard</h2>
-          <p className="text-gray-600 mb-4">{error}</p>
-          <button 
-            onClick={fetchDashboardData}
-            className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700"
-          >
-            Retry
-          </button>
+      <AdminLayout>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <ExclamationTriangleIcon className="h-16 w-16 text-red-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Error Loading Dashboard</h2>
+            <p className="text-gray-600 mb-4">{error}</p>
+            <button 
+              onClick={fetchDashboardData}
+              className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700"
+            >
+              Retry
+            </button>
+          </div>
         </div>
-      </div>
+      </AdminLayout>
     );
   }
 
@@ -294,127 +298,127 @@ export default function AdminDashboard() {
             </div>
           </div>
         </div>
-          {/* Overview Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <StatCard
-              title="Total Users"
-              value={data.overview.totalUsers.toLocaleString()}
-              icon={UsersIcon}
-              color="blue"
-              trend="up"
-              trendValue="+12%"
-            />
-            <StatCard
-              title="Total Orders"
-              value={data.overview.totalOrders.toLocaleString()}
-              icon={ShoppingCartIcon}
-              color="green"
-              trend="up"
-              trendValue="+8%"
-            />
-            <StatCard
-              title="Total Revenue"
-              value={`₱${data.overview.totalRevenue.toLocaleString()}`}
-              icon={CurrencyDollarIcon}
-              color="purple"
-              trend="up"
-              trendValue="+15%"
-            />
-            <StatCard
-              title="Low Stock Items"
-              value={data.overview.lowStockProducts}
-              icon={ExclamationTriangleIcon}
-              color="red"
-              trend="down"
-              trendValue="-3"
-            />
-          </div>
 
-          {/* Charts Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            {/* Sales Trend Chart */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Sales Trend (Last 7 Days)</h3>
-              <div className="h-80">
-                <Line data={salesChartData} options={chartOptions} />
-              </div>
-            </div>
+        {/* Overview Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <StatCard
+            title="Total Users"
+            value={data.overview.totalUsers.toLocaleString()}
+            icon={UsersIcon}
+            color="blue"
+            trend="up"
+            trendValue="+12%"
+          />
+          <StatCard
+            title="Total Orders"
+            value={data.overview.totalOrders.toLocaleString()}
+            icon={ShoppingCartIcon}
+            color="green"
+            trend="up"
+            trendValue="+8%"
+          />
+          <StatCard
+            title="Total Revenue"
+            value={`₱${data.overview.totalRevenue.toLocaleString()}`}
+            icon={CurrencyDollarIcon}
+            color="purple"
+            trend="up"
+            trendValue="+15%"
+          />
+          <StatCard
+            title="Low Stock Items"
+            value={data.overview.lowStockProducts}
+            icon={ExclamationTriangleIcon}
+            color="red"
+            trend="down"
+            trendValue="-3"
+          />
+        </div>
 
-            {/* Monthly Revenue Chart */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Monthly Revenue</h3>
-              <div className="h-80">
-                <Bar data={monthlyRevenueData} options={chartOptions} />
-              </div>
+        {/* Charts Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          {/* Sales Trend Chart */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Sales Trend (Last 7 Days)</h3>
+            <div className="h-80">
+              <Line data={salesChartData} options={chartOptions} />
             </div>
           </div>
 
-          {/* Bottom Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Top Products */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Products</h3>
-              <div className="h-64">
-                <Doughnut data={topProductsData} options={chartOptions} />
-              </div>
-              <div className="mt-4 space-y-2">
-                {data.topProducts.slice(0, 3).map((product, index) => (
-                  <div key={product.id} className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">{product.name}</span>
-                    <span className="text-sm font-medium">{product.sales} sold</span>
-                  </div>
-                ))}
-              </div>
+          {/* Monthly Revenue Chart */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Monthly Revenue</h3>
+            <div className="h-80">
+              <Bar data={monthlyRevenueData} options={chartOptions} />
             </div>
+          </div>
+        </div>
 
-            {/* Recent Orders */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Orders</h3>
-              <div className="space-y-4">
-                {data.recentOrders.slice(0, 5).map((order) => (
-                  <div key={order.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div>
-                      <p className="font-medium text-gray-900">
-                        {order.customerName || 'Guest User'}
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        {new Date(order.createdAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-semibold text-gray-900">₱{order.total.toLocaleString()}</p>
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        order.status === 'paid' 
-                          ? 'bg-green-100 text-green-800'
-                          : order.status === 'pending'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-gray-100 text-gray-800'
-                      }`}>
-                        {order.status}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+        {/* Bottom Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Top Products */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Products</h3>
+            <div className="h-64">
+              <Doughnut data={topProductsData} options={chartOptions} />
             </div>
+            <div className="mt-4 space-y-2">
+              {data.topProducts.slice(0, 3).map((product, index) => (
+                <div key={product.id} className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">{product.name}</span>
+                  <span className="text-sm font-medium">{product.sales} sold</span>
+                </div>
+              ))}
+            </div>
+          </div>
 
-            {/* Quick Actions */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-              <div className="space-y-3">
-                <button className="w-full bg-primary-600 text-white py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors">
-                  Add New Product
-                </button>
-                <button className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
-                  View All Orders
-                </button>
-                <button className="w-full bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors">
-                  Manage Inventory
-                </button>
-                <button className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
-                  Send Notifications
-                </button>
-              </div>
+          {/* Recent Orders */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Orders</h3>
+            <div className="space-y-4">
+              {data.recentOrders.slice(0, 5).map((order) => (
+                <div key={order.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div>
+                    <p className="font-medium text-gray-900">
+                      {order.customerName || 'Guest User'}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {new Date(order.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-semibold text-gray-900">₱{order.total.toLocaleString()}</p>
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                      order.status === 'paid' 
+                        ? 'bg-green-100 text-green-800'
+                        : order.status === 'pending'
+                        ? 'bg-yellow-100 text-yellow-800'
+                        : 'bg-gray-100 text-gray-800'
+                    }`}>
+                      {order.status}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+            <div className="space-y-3">
+              <button className="w-full bg-primary-600 text-white py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors">
+                Add New Product
+              </button>
+              <button className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                View All Orders
+              </button>
+              <button className="w-full bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors">
+                Manage Inventory
+              </button>
+              <button className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
+                Send Notifications
+              </button>
             </div>
           </div>
         </div>
