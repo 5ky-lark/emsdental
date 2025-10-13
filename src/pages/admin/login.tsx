@@ -27,7 +27,7 @@ export default function AdminLogin() {
     try {
       console.log('Attempting admin login with:', { username, hasPassword: !!password });
       
-      const response = await fetch('/api/admin/auth', {
+      const response = await fetch('/api/admin/auth-simple', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +50,8 @@ export default function AdminLogin() {
       console.log('Login successful, redirecting to dashboard');
       
       // Use window.location for a hard redirect to avoid Next.js navigation issues
-      window.location.href = '/admin/dashboard';
+      // Temporarily redirect to simple dashboard for testing
+      window.location.href = '/admin/dashboard-simple';
     } catch (err) {
       console.error('Login error:', err);
       setError(err instanceof Error ? err.message : 'Login failed');
