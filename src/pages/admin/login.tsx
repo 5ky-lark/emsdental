@@ -16,6 +16,8 @@ export default function AdminLogin() {
     setError('');
 
     try {
+      console.log('Attempting admin login with:', { username, hasPassword: !!password });
+      
       const response = await fetch('/api/admin/auth', {
         method: 'POST',
         headers: {
@@ -24,7 +26,9 @@ export default function AdminLogin() {
         body: JSON.stringify({ username, password }),
       });
 
+      console.log('Response status:', response.status);
       const data = await response.json();
+      console.log('Response data:', data);
 
       if (!response.ok) {
         throw new Error(data.message || 'Login failed');
@@ -32,8 +36,12 @@ export default function AdminLogin() {
 
       // Set sessionStorage for client-side checks
       sessionStorage.setItem('isAdmin', 'true');
+      sessionStorage.setItem('adminUser', JSON.stringify(data.user));
+      
+      console.log('Login successful, redirecting to dashboard');
       router.push('/admin/dashboard');
     } catch (err) {
+      console.error('Login error:', err);
       setError(err instanceof Error ? err.message : 'Login failed');
     } finally {
       setIsLoading(false);

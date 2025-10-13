@@ -32,6 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     };
 
     // Create admin-specific token
+    const jwtSecret = process.env.JWT_SECRET || 'fallback-secret-key-for-admin';
     const token = jwt.sign(
       { 
         id: adminUser.id,
@@ -39,15 +40,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         role: adminUser.role,
         isAdmin: true 
       },
-      process.env.JWT_SECRET!,
+      jwtSecret,
       { expiresIn: '1d' }
     );
 
-    // Clear any existing admin token
-    res.setHeader('Set-Cookie', [
-      'adminToken=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0',
-      `adminToken=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400${process.env.NODE_ENV === 'production' ? '; Secure' : ''}`
-    ]);
+    // Set admin token cookie
+    const cookieOptions = [
+      `adminToken=${token}`,
+      'Path=/',
+      'HttpOnly',
+      'SameSite=Lax',
+      'Max-Age=86400'
+    ];
+    
+    if (process.env.NODE_ENV === 'production') {
+      cookieOptions.push('Secure');
+    }
+    
+    res.setHeader('Set-Cookie', cookieOptions.join('; '));
 
     return res.status(200).json({
       success: true,

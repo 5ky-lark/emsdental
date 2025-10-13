@@ -33,10 +33,21 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     }
   }, [router]);
 
-  const handleLogout = () => {
-    // Clear admin token
-    document.cookie = 'adminToken=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0';
-    router.push('/admin/login');
+  const handleLogout = async () => {
+    try {
+      // Clear session storage
+      sessionStorage.removeItem('isAdmin');
+      sessionStorage.removeItem('adminUser');
+      
+      // Clear admin token cookie
+      document.cookie = 'adminToken=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0';
+      
+      // Redirect to login
+      router.push('/admin/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      router.push('/admin/login');
+    }
   };
 
   const navigation = [
