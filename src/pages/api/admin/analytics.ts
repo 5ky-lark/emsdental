@@ -22,7 +22,7 @@ interface AnalyticsData {
   }>;
   recentOrders: Array<{
     id: string;
-    customerName: string;
+    customerName: string | null;
     total: number;
     status: string;
     createdAt: Date;
