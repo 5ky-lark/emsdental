@@ -30,13 +30,12 @@ export default async function handler(
     const updatedOrder = await prisma.order.update({
       where: { id: order_id },
       data: {
-        status: 'processing',
-        paymentInfo: {
-          update: {
-            status: 'paid',
-            paymentIntentId: payment_intent_id
-          }
-        }
+        status: 'paid',
+        paymentInfo: JSON.stringify({
+          status: 'paid',
+          paymentIntentId: payment_intent_id,
+          verifiedAt: new Date().toISOString()
+        })
       },
       include: {
         items: {
