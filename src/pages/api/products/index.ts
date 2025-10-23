@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(200).json(productsWithInclusions);
 
       case 'POST':
-        const { name, description, price, image, inclusions } = req.body;
+        const { name, description, price, stock, image, inclusions } = req.body;
 
         if (!name || !description || !price || !image) {
           return res.status(400).json({ 
@@ -51,6 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             name,
             description,
             price: Number(price),
+            stock: Number(stock) || 0,
             image,
             category: 'default', // Set a default category since it's required by the schema
           },

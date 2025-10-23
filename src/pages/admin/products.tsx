@@ -39,28 +39,6 @@ export default function AdminProducts() {
     }
   };
 
-  const updateStock = async (productId: string, newStock: number) => {
-    try {
-      const response = await fetch('/api/admin/inventory', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ productId: productId, stock: newStock }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update stock');
-      }
-
-      // Update local state
-      setProducts(products.map(p => 
-        p.id === productId ? { ...p, stock: newStock } : p
-      ));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update stock');
-    }
-  };
 
   const deleteProduct = async (productId: string) => {
     if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
@@ -194,18 +172,6 @@ export default function AdminProducts() {
                         }`}>
                           {product.stock}
                         </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex items-center space-x-2">
-                          <input
-                            type="number"
-                            min="0"
-                            value={product.stock}
-                            onChange={(e) => updateStock(product.id, parseInt(e.target.value) || 0)}
-                            className="w-20 px-2 py-1 border border-gray-300 rounded text-sm"
-                          />
-                          <span className="text-xs text-gray-500">units</span>
-                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex items-center space-x-2">

@@ -11,6 +11,7 @@ const productSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   description: z.string().min(1, 'Description is required'),
   price: z.number().min(0, 'Price must be positive'),
+  stock: z.number().min(0, 'Stock must be non-negative'),
   image: z.string().min(1, 'Image is required'),
   inclusions: z.array(
     z.object({
@@ -172,6 +173,22 @@ export default function NewProduct() {
                 />
                 {errors.price && (
                   <p className="mt-1 text-sm text-red-600">{errors.price.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="stock" className="block text-sm font-medium text-gray-700">
+                  Stock
+                </label>
+                <input
+                  type="number"
+                  id="stock"
+                  min="0"
+                  {...register('stock', { valueAsNumber: true })}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                />
+                {errors.stock && (
+                  <p className="mt-1 text-sm text-red-600">{errors.stock.message}</p>
                 )}
               </div>
 

@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     if (req.method === 'PUT') {
-      const { name, description, price, image, inclusions } = req.body;
+      const { name, description, price, stock, image, inclusions } = req.body;
 
       if (!name || !description || !price || !image) {
         return res.status(400).json({ 
@@ -54,6 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           name,
           description,
           price: Number(price),
+          stock: Number(stock) || 0,
           image,
           category: 'default', // Keep the default category
         },
