@@ -2,12 +2,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import {
-  HomeIcon,
   ShoppingCartIcon,
   CubeIcon,
-  UsersIcon,
-  ChartBarIcon,
-  CogIcon,
   BellIcon,
   ArrowRightOnRectangleIcon,
   Bars3Icon,
@@ -51,13 +47,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   };
 
   const navigation = [
-    { name: 'Dashboard', href: '/admin/dashboard', icon: HomeIcon },
     { name: 'Products', href: '/admin/products', icon: CubeIcon },
     { name: 'Orders', href: '/admin/orders', icon: ShoppingCartIcon },
-    { name: 'Users', href: '/admin/users', icon: UsersIcon },
-    { name: 'Analytics', href: '/admin/analytics', icon: ChartBarIcon },
-    { name: 'Reports', href: '/admin/reports', icon: ChartBarIcon },
-    { name: 'Settings', href: '/admin/settings', icon: CogIcon },
   ];
 
   if (!isAdmin) {
