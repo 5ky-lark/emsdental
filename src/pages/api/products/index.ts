@@ -65,6 +65,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 name: inclusion.name,
                 description: inclusion.description || "",
                 price: Number(inclusion.price),
+                stock: Number(inclusion.stock) || 0,
                 productId: newProduct.id,
               },
             })

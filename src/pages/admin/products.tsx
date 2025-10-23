@@ -46,7 +46,7 @@ export default function AdminProducts() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: productId, stock: newStock }),
+        body: JSON.stringify({ productId: productId, stock: newStock }),
       });
 
       if (!response.ok) {
@@ -59,6 +59,27 @@ export default function AdminProducts() {
       ));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update stock');
+    }
+  };
+
+  const deleteProduct = async (productId: string) => {
+    if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/products/${productId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete product');
+      }
+
+      // Remove from local state
+      setProducts(products.filter(p => p.id !== productId));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete product');
     }
   };
 
@@ -102,8 +123,14 @@ export default function AdminProducts() {
           )}
 
           <div className="bg-white rounded-lg shadow">
-            <div className="px-6 py-4 border-b border-gray-200">
+            <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
               <h2 className="text-xl font-semibold text-gray-900">All Products ({products.length})</h2>
+              <a
+                href="/admin/products/new"
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Add New Product
+              </a>
             </div>
             
             <div className="overflow-x-auto">
@@ -178,6 +205,22 @@ export default function AdminProducts() {
                             className="w-20 px-2 py-1 border border-gray-300 rounded text-sm"
                           />
                           <span className="text-xs text-gray-500">units</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex items-center space-x-2">
+                          <a
+                            href={`/admin/products/${product.id}/edit`}
+                            className="text-blue-600 hover:text-blue-900 font-medium"
+                          >
+                            Edit
+                          </a>
+                          <button
+                            onClick={() => deleteProduct(product.id)}
+                            className="text-red-600 hover:text-red-900 font-medium"
+                          >
+                            Delete
+                          </button>
                         </div>
                       </td>
                     </tr>

@@ -18,6 +18,7 @@ const productSchema = z.object({
       name: z.string().min(1, 'Inclusion name is required'),
       description: z.string().optional(),
       price: z.number().min(0, 'Price must be positive'),
+      stock: z.number().min(0, 'Stock must be non-negative'),
     })
   ).optional(),
 });
@@ -145,7 +146,7 @@ export default function EditProduct() {
   };
 
   const addInclusion = () => {
-    append({ name: '', description: '', price: 0 });
+    append({ name: '', description: '', price: 0, stock: 0 });
   };
 
   return (
@@ -292,8 +293,25 @@ export default function EditProduct() {
                               <p className="mt-1 text-sm text-red-600">
                                 {errors.inclusions[index]?.price?.message}
                               </p>
-                      )}
-                    </div>
+                            )}
+                          </div>
+                          
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700">
+                              Stock
+                            </label>
+                            <input
+                              type="number"
+                              min="0"
+                              {...register(`inclusions.${index}.stock`, { valueAsNumber: true })}
+                              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                            />
+                            {errors.inclusions?.[index]?.stock && (
+                              <p className="mt-1 text-sm text-red-600">
+                                {errors.inclusions[index]?.stock?.message}
+                              </p>
+                            )}
+                          </div>
                         </div>
                         
                         <div className="mt-2">
