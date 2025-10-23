@@ -163,6 +163,10 @@ export default function AdminProducts() {
                               width={48}
                               height={48}
                               className="h-12 w-12 rounded-lg object-cover"
+                              priority={true}
+                              loading="eager"
+                              unoptimized={true}
+                              quality={75}
                             />
                           </div>
                           <div className="ml-4">

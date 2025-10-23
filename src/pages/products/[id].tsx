@@ -196,6 +196,10 @@ export default function ProductPage() {
                   width={500}
                   height={500}
                   className="w-full h-full object-center object-cover"
+                  priority={true}
+                  loading="eager"
+                  unoptimized={true}
+                  quality={75}
                 />
               </div>
             </div>
