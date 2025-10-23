@@ -98,10 +98,6 @@ export default function Cart({ isOpen, onClose }: CartProps) {
                                     width={96}
                                     height={96}
                                     className="h-full w-full object-cover object-center"
-                                    priority={true}
-                                    loading="eager"
-                                    unoptimized={true}
-                                    quality={75}
                                   />
                                 </div>
 
