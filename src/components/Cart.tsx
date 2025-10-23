@@ -86,7 +86,32 @@ export default function Cart({ isOpen, onClose }: CartProps) {
                                   <div>
                                     <div className="flex justify-between text-base font-medium text-gray-900">
                                       <h3>{item.name}</h3>
-                                      <p className="ml-4">${item.price.toFixed(2)}</p>
+                                      <p className="ml-4">₱{item.price.toLocaleString()}</p>
+                                    </div>
+                                    
+                                    {/* Show selected inclusions if any */}
+                                    {item.selectedInclusions && item.selectedInclusions.length > 0 && (
+                                      <div className="mt-2">
+                                        <p className="text-sm text-gray-600">Included items:</p>
+                                        <ul className="text-sm text-gray-500 space-y-1">
+                                          {item.selectedInclusions.map((inclusion, index) => (
+                                            <li key={index} className="flex justify-between">
+                                              <span>• {inclusion.name}</span>
+                                              <span>₱{inclusion.price.toLocaleString()}</span>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                    )}
+                                    
+                                    {/* Show total price for this item */}
+                                    <div className="mt-2 text-sm">
+                                      <div className="flex justify-between">
+                                        <span className="text-gray-600">Item total:</span>
+                                        <span className="font-medium">
+                                          ₱{((item.price + (item.selectedInclusions?.reduce((sum, inc) => sum + inc.price, 0) || 0)) * item.quantity).toLocaleString()}
+                                        </span>
+                                      </div>
                                     </div>
                                   </div>
                                   <div className="flex flex-1 items-end justify-between text-sm">
@@ -127,7 +152,7 @@ export default function Cart({ isOpen, onClose }: CartProps) {
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
-                        <p>${total.toFixed(2)}</p>
+                        <p>₱{total.toLocaleString()}</p>
                       </div>
                       <p className="mt-0.5 text-sm text-gray-500">
                         Shipping and taxes calculated at checkout.

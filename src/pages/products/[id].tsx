@@ -199,6 +199,22 @@ export default function ProductPage() {
                 </div>
               </div>
 
+              {/* Stock Display */}
+              <div className="mt-6">
+                <div className="flex items-center space-x-4">
+                  <span className="text-sm font-medium text-gray-900">Stock:</span>
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                    product.stock > 10 
+                      ? 'bg-green-100 text-green-800' 
+                      : product.stock > 0 
+                      ? 'bg-yellow-100 text-yellow-800' 
+                      : 'bg-red-100 text-red-800'
+                  }`}>
+                    {product.stock > 0 ? `${product.stock} units available` : 'Out of stock'}
+                  </span>
+                </div>
+              </div>
+
               {product.features && product.features.length > 0 && (
                 <div className="mt-6">
                   <h3 className="text-sm font-medium text-gray-900">Features</h3>
@@ -293,10 +309,19 @@ export default function ProductPage() {
                 <button
                   type="button"
                   onClick={handleAddToCart}
-                  disabled={isLoading}
-                  className="w-full bg-primary-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+                  disabled={isLoading || product.stock === 0}
+                  className={`w-full border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                    product.stock === 0
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-primary-600 hover:bg-primary-700 focus:ring-primary-500'
+                  } disabled:opacity-50`}
                 >
-                  {isLoading ? 'Adding to Cart...' : 'Add to Cart'}
+                  {product.stock === 0 
+                    ? 'Out of Stock' 
+                    : isLoading 
+                    ? 'Adding to Cart...' 
+                    : 'Add to Cart'
+                  }
                 </button>
               </div>
             </div>

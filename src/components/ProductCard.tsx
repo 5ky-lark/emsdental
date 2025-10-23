@@ -22,9 +22,6 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  // Debug: log the image array
-  console.log('Product images:', product.name, product.images);
-
   const handleAddToCart = async () => {
     if (!session) {
       router.push('/auth/signin');
@@ -38,7 +35,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         name: product.name,
         price: product.price,
         quantity: 1,
-        image: product.images?.[0] || '/images/placeholder.jpg',
+        image: getImageUrl(),
       };
       addItem(cartItem);
     } catch (error) {
@@ -48,25 +45,31 @@ export default function ProductCard({ product }: ProductCardProps) {
     }
   };
 
-  // Improved image path logic: support both images array and image string
-  let imageUrl = '/images/placeholder.jpg';
-  if (Array.isArray(product.images) && product.images[0]) {
-    if (product.images[0].startsWith('/') || product.images[0].startsWith('http')) {
-      imageUrl = product.images[0];
-    } else {
-      imageUrl = '/images/' + product.images[0];
+  // Get the correct image URL
+  const getImageUrl = () => {
+    // Check for single image field first (from API)
+    if ((product as any).image) {
+      const singleImage = (product as any).image;
+      if (singleImage.startsWith('/') || singleImage.startsWith('http')) {
+        return singleImage;
+      } else {
+        return singleImage; // API already returns full path
+      }
     }
-  } else if ((product as any).image) {
-    const singleImage = (product as any).image;
-    if (singleImage.startsWith('/') || singleImage.startsWith('http')) {
-      imageUrl = singleImage;
-    } else {
-      imageUrl = '/images/' + singleImage;
+    
+    // Fallback to images array
+    if (Array.isArray(product.images) && product.images[0]) {
+      if (product.images[0].startsWith('/') || product.images[0].startsWith('http')) {
+        return product.images[0];
+      } else {
+        return '/images/' + product.images[0];
+      }
     }
-  }
-  if (imageError) {
-    imageUrl = '/images/placeholder.jpg';
-  }
+    
+    return '/images/placeholder.jpg';
+  };
+
+  const imageUrl = imageError ? '/images/placeholder.jpg' : getImageUrl();
 
   return (
     <>
@@ -94,14 +97,37 @@ export default function ProductCard({ product }: ProductCardProps) {
             <h3 className="text-lg font-medium text-gray-900">{product.name}</h3>
           </Link>
           <p className="mt-1 text-sm text-gray-500 line-clamp-2">{product.description}</p>
+          
+          {/* Stock Display */}
+          <div className="mt-2">
+            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+              product.stock > 10 
+                ? 'bg-green-100 text-green-800' 
+                : product.stock > 0 
+                ? 'bg-yellow-100 text-yellow-800' 
+                : 'bg-red-100 text-red-800'
+            }`}>
+              {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+            </span>
+          </div>
+          
           <div className="mt-4 flex items-center justify-between">
             <p className="text-lg font-medium text-gray-900">₱{product.price.toLocaleString()}</p>
             <button
               onClick={handleAddToCart}
-              disabled={isLoading}
-              className="rounded-md bg-primary-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 disabled:opacity-50"
+              disabled={isLoading || product.stock === 0}
+              className={`rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${
+                product.stock === 0
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-primary-600 hover:bg-primary-700 focus-visible:outline-primary-600'
+              } disabled:opacity-50`}
             >
-              {isLoading ? 'Adding...' : 'Add to Cart'}
+              {product.stock === 0 
+                ? 'Out of Stock' 
+                : isLoading 
+                ? 'Adding...' 
+                : 'Add to Cart'
+              }
             </button>
           </div>
         </div>
