@@ -3,7 +3,7 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  images: string[];
+  image: string; // Changed from images: string[] to image: string to match API
   category: string;
   stock: number;
   featured?: boolean;

@@ -47,9 +47,9 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   // Get the correct image URL with better fallback handling
   const getImageUrl = () => {
-    // Check for single image field first (from API)
-    if ((product as any).image) {
-      const singleImage = (product as any).image;
+    // Check for single image field (from API)
+    if (product.image) {
+      const singleImage = product.image;
       
       // If it's already a full URL or API path, use it
       if (singleImage.startsWith('http') || singleImage.startsWith('/api/images/')) {
@@ -69,9 +69,9 @@ export default function ProductCard({ product }: ProductCardProps) {
       return singleImage;
     }
     
-    // Fallback to images array
-    if (Array.isArray(product.images) && product.images[0]) {
-      const imageUrl = product.images[0];
+    // Fallback to images array (for backward compatibility)
+    if (Array.isArray((product as any).images) && (product as any).images[0]) {
+      const imageUrl = (product as any).images[0];
       
       if (imageUrl.startsWith('http') || imageUrl.startsWith('/api/images/')) {
         return imageUrl;
