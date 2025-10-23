@@ -50,8 +50,11 @@ export default function ProductCard({ product }: ProductCardProps) {
     // Check for single image field first (from API)
     if ((product as any).image) {
       const singleImage = (product as any).image;
-      if (singleImage.startsWith('/') || singleImage.startsWith('http')) {
+      if (singleImage.startsWith('/api/images/') || singleImage.startsWith('http')) {
         return singleImage;
+      } else if (singleImage.startsWith('/uploads/')) {
+        // Convert /uploads/ path to /api/images/ path
+        return singleImage.replace('/uploads/', '/api/images/');
       } else {
         return singleImage; // API already returns full path
       }
@@ -59,10 +62,12 @@ export default function ProductCard({ product }: ProductCardProps) {
     
     // Fallback to images array
     if (Array.isArray(product.images) && product.images[0]) {
-      if (product.images[0].startsWith('/') || product.images[0].startsWith('http')) {
+      if (product.images[0].startsWith('/api/images/') || product.images[0].startsWith('http')) {
         return product.images[0];
+      } else if (product.images[0].startsWith('/uploads/')) {
+        return product.images[0].replace('/uploads/', '/api/images/');
       } else {
-        return '/images/' + product.images[0];
+        return '/api/images/' + product.images[0];
       }
     }
     

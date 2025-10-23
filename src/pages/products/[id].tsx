@@ -171,7 +171,13 @@ export default function ProductPage() {
             <div className="lg:max-w-lg lg:self-end">
               <div className="aspect-w-1 aspect-h-1 rounded-lg overflow-hidden">
                 <Image
-                  src={(product as any).image || (Array.isArray(product.images) && product.images[0]) || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgdmlld0JveD0iMCAwIDUwMCA1MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMDAgMjAwSDMwMFYzMDBIMjAwVjIwMFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2Zz4K'}
+                  src={(() => {
+                    const image = (product as any).image || (Array.isArray(product.images) && product.images[0]);
+                    if (!image) return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgdmlld0JveD0iMCAwIDUwMCA1MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMDAgMjAwSDMwMFYzMDBIMjAwVjIwMFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2Zz4K';
+                    if (image.startsWith('/api/images/') || image.startsWith('http')) return image;
+                    if (image.startsWith('/uploads/')) return image.replace('/uploads/', '/api/images/');
+                    return image;
+                  })()}
                   alt={product.name}
                   width={500}
                   height={500}

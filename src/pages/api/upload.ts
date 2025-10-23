@@ -50,8 +50,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Save the file
     await writeFile(path, await readFile(file.filepath));
 
-    // Return the public URL
-    return res.status(200).json({ url: `/uploads/${filename}` });
+    // Return the public URL that will work with our image API
+    return res.status(200).json({ url: `/api/images/${filename}` });
   } catch (error) {
     console.error('Error uploading file:', error);
     return res.status(500).json({ message: 'Error uploading file' });

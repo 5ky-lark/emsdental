@@ -139,7 +139,12 @@ export default function AdminProducts() {
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-12 w-12">
                             <Image
-                              src={product.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xOCAxOEgzMFYzMEgxOFYxOFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2Zz4K'}
+                              src={(() => {
+                                if (!product.image) return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xOCAxOEgzMFYzMEgxOFYxOFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2Zz4K';
+                                if (product.image.startsWith('/api/images/') || product.image.startsWith('http')) return product.image;
+                                if (product.image.startsWith('/uploads/')) return product.image.replace('/uploads/', '/api/images/');
+                                return product.image;
+                              })()}
                               alt={product.name}
                               width={48}
                               height={48}
