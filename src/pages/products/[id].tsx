@@ -120,7 +120,7 @@ export default function ProductPage() {
           name: product.name,
           price: product.price,
           quantity,
-          image: (product as any).image || (Array.isArray(product.images) && product.images[0]) || '/images/placeholder.jpg',
+          image: product.image || '/images/placeholder.jpg',
           selectedInclusions: selectedInclusionsData
         });
         // Optional: Show success message or redirect to cart
@@ -172,7 +172,7 @@ export default function ProductPage() {
               <div className="aspect-w-1 aspect-h-1 rounded-lg overflow-hidden">
                 <Image
                   src={(() => {
-                    const image = (product as any).image || (Array.isArray(product.images) && product.images[0]);
+                    const image = product.image;
                     if (!image) return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgdmlld0JveD0iMCAwIDUwMCA1MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMDAgMjAwSDMwMFYzMDBIMjAwVjIwMFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2Zz4K';
                     
                     // If it's already a full URL or API path, use it
