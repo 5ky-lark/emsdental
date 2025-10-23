@@ -76,8 +76,22 @@ export default function Cart({ isOpen, onClose }: CartProps) {
                                   <Image
                                     src={(() => {
                                       if (!item.image) return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9Ijk2IiBoZWlnaHQ9Ijk2IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0zNiAzNkg2MFY2MEgzNlYzNloiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2Zz4K';
-                                      if (item.image.startsWith('/api/images/') || item.image.startsWith('http')) return item.image;
-                                      if (item.image.startsWith('/uploads/')) return item.image.replace('/uploads/', '/api/images/');
+                                      
+                                      // If it's already a full URL or API path, use it
+                                      if (item.image.startsWith('http') || item.image.startsWith('/api/images/')) {
+                                        return item.image;
+                                      }
+                                      
+                                      // If it's an uploads path, try direct static serving first
+                                      if (item.image.startsWith('/uploads/')) {
+                                        return item.image;
+                                      }
+                                      
+                                      // If it's just a filename, construct the path
+                                      if (!item.image.startsWith('/')) {
+                                        return `/uploads/${item.image}`;
+                                      }
+                                      
                                       return item.image;
                                     })()}
                                     alt={item.name}

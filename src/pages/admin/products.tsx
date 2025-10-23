@@ -141,8 +141,22 @@ export default function AdminProducts() {
                             <Image
                               src={(() => {
                                 if (!product.image) return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xOCAxOEgzMFYzMEgxOFYxOFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2Zz4K';
-                                if (product.image.startsWith('/api/images/') || product.image.startsWith('http')) return product.image;
-                                if (product.image.startsWith('/uploads/')) return product.image.replace('/uploads/', '/api/images/');
+                                
+                                // If it's already a full URL or API path, use it
+                                if (product.image.startsWith('http') || product.image.startsWith('/api/images/')) {
+                                  return product.image;
+                                }
+                                
+                                // If it's an uploads path, try direct static serving first
+                                if (product.image.startsWith('/uploads/')) {
+                                  return product.image;
+                                }
+                                
+                                // If it's just a filename, construct the path
+                                if (!product.image.startsWith('/')) {
+                                  return `/uploads/${product.image}`;
+                                }
+                                
                                 return product.image;
                               })()}
                               alt={product.name}

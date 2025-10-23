@@ -45,30 +45,47 @@ export default function ProductCard({ product }: ProductCardProps) {
     }
   };
 
-  // Get the correct image URL
+  // Get the correct image URL with better fallback handling
   const getImageUrl = () => {
     // Check for single image field first (from API)
     if ((product as any).image) {
       const singleImage = (product as any).image;
-      if (singleImage.startsWith('/api/images/') || singleImage.startsWith('http')) {
+      
+      // If it's already a full URL or API path, use it
+      if (singleImage.startsWith('http') || singleImage.startsWith('/api/images/')) {
         return singleImage;
-      } else if (singleImage.startsWith('/uploads/')) {
-        // Convert /uploads/ path to /api/images/ path
-        return singleImage.replace('/uploads/', '/api/images/');
-      } else {
-        return singleImage; // API already returns full path
       }
+      
+      // If it's an uploads path, try both API route and direct static serving
+      if (singleImage.startsWith('/uploads/')) {
+        return singleImage; // Try direct static serving first
+      }
+      
+      // If it's just a filename, construct the path
+      if (!singleImage.startsWith('/')) {
+        return `/uploads/${singleImage}`;
+      }
+      
+      return singleImage;
     }
     
     // Fallback to images array
     if (Array.isArray(product.images) && product.images[0]) {
-      if (product.images[0].startsWith('/api/images/') || product.images[0].startsWith('http')) {
-        return product.images[0];
-      } else if (product.images[0].startsWith('/uploads/')) {
-        return product.images[0].replace('/uploads/', '/api/images/');
-      } else {
-        return '/api/images/' + product.images[0];
+      const imageUrl = product.images[0];
+      
+      if (imageUrl.startsWith('http') || imageUrl.startsWith('/api/images/')) {
+        return imageUrl;
       }
+      
+      if (imageUrl.startsWith('/uploads/')) {
+        return imageUrl;
+      }
+      
+      if (!imageUrl.startsWith('/')) {
+        return `/uploads/${imageUrl}`;
+      }
+      
+      return imageUrl;
     }
     
     // Return a simple placeholder data URL
