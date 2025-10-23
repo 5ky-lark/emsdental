@@ -206,7 +206,12 @@ export default function Home() {
                 <div key={product.id} className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-all duration-300">
                   <div className="relative h-48 w-full">
                     <Image
-                      src={product.image.startsWith('http') ? product.image : `/images/${product.image}`}
+                      src={(() => {
+                        if (!product.image) return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xNzUgMTI1SDIyNVYxNzVIMTc1VjEyNVoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2Zz4K';
+                        if (product.image.startsWith('/api/images/') || product.image.startsWith('http')) return product.image;
+                        if (product.image.startsWith('/uploads/')) return product.image.replace('/uploads/', '/api/images/');
+                        return product.image;
+                      })()}
                       alt={product.name}
                       fill
                       className="object-cover"
