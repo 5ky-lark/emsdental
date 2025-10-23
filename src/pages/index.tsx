@@ -201,10 +201,10 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="mt-12 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-12 grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {products.slice(0, 3).map((product) => (
-                <div key={product.id} className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-all duration-300">
-                  <div className="relative h-48 w-full">
+                <div key={product.id} className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2 border border-gray-100">
+                  <div className="relative h-56 sm:h-64 w-full bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
                     <Image
                       src={(() => {
                         if (!product.image) return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xNzUgMTI1SDIyNVYxNzVIMTc1VjEyNVoiIGZpbGw9IiM5Q0EzQUYiLz4KPHN2Zz4K';
@@ -214,19 +214,41 @@ export default function Home() {
                       })()}
                       alt={product.name}
                       fill
-                      className="object-cover"
+                      className="object-cover group-hover:scale-110 transition-transform duration-700"
                     />
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-lg font-semibold text-gray-900">{product.name}</h3>
-                    <p className="mt-2 text-gray-500 line-clamp-2">{product.description}</p>
-                    <div className="mt-4 flex items-center justify-between">
-                      <span className="text-2xl font-bold text-gray-900">
-                        ₱{product.price.toLocaleString()}
+                    {/* Overlay gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    
+                    {/* Stock indicator */}
+                    <div className="absolute top-4 left-4">
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
+                        product.stock > 10 
+                          ? 'bg-green-100 text-green-800 border border-green-200' 
+                          : product.stock > 0 
+                          ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' 
+                          : 'bg-red-100 text-red-800 border border-red-200'
+                      }`}>
+                        <div className={`w-2 h-2 rounded-full mr-2 ${
+                          product.stock > 10 ? 'bg-green-500' : product.stock > 0 ? 'bg-yellow-500' : 'bg-red-500'
+                        }`}></div>
+                        {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
                       </span>
+                    </div>
+                  </div>
+                  <div className="p-6 space-y-4">
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">{product.name}</h3>
+                      <p className="mt-2 text-gray-600 line-clamp-2 leading-relaxed">{product.description}</p>
+                    </div>
+                    
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                      <div className="flex flex-col">
+                        <span className="text-3xl font-bold text-gray-900">₱{product.price.toLocaleString()}</span>
+                        <span className="text-sm text-gray-500">Free shipping included</span>
+                      </div>
                       <Link
                         href={`/products/${product.id}`}
-                        className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700"
+                        className="inline-flex items-center px-6 py-3 border border-transparent rounded-xl shadow-lg text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:shadow-xl hover:scale-105 transition-all duration-300"
                       >
                         View Details
                         <ArrowRightIcon className="ml-2 h-4 w-4" />
@@ -237,13 +259,13 @@ export default function Home() {
               ))}
             </div>
 
-            <div className="mt-12 text-center">
+            <div className="mt-16 text-center">
               <Link
                 href="/products"
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700"
+                className="inline-flex items-center px-8 py-4 border border-transparent text-lg font-semibold rounded-2xl text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:shadow-2xl hover:scale-105 transition-all duration-300 shadow-xl"
               >
                 View All Products
-                <ArrowRightIcon className="ml-2 h-5 w-5" />
+                <ArrowRightIcon className="ml-3 h-6 w-6" />
               </Link>
             </div>
           </div>
